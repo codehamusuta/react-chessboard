@@ -124,9 +124,12 @@ ul {
   box-sizing: border-box;
   height: 50px;
 }
-
 .chess-piece > img {
   width: 100%;
+  cursor: grab;
+}
+.grabbing:active {
+  cursor: grabbing;
 }
 
 /* .status {
