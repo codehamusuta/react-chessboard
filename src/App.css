@@ -128,9 +128,9 @@ ul {
   width: 100%;
   cursor: grab;
 }
-.grabbing:active {
+/* .grabbing:active {
   cursor: grabbing;
-}
+} */
 
 /* .status {
   margin-bottom: 10px;
