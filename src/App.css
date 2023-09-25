@@ -115,6 +115,9 @@ ul {
   left: 3px;
   position: absolute;
 }
+.square.dragover {
+  border: 3px solid #faf0e8; 
+}
 
 .chess-piece {
   background: None;

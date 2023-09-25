@@ -23,7 +23,7 @@ function getSquareName(rank, file) {
  * Components
  ******************************************************************************/
 function ChessPiece({piece, position}) {
-  const [isDragging, setIsDragging] = useState(false)
+  const [isDragging, setIsDragging] = useState(false) 
   
   const onDragStart = (e) => {
     
@@ -31,7 +31,7 @@ function ChessPiece({piece, position}) {
     e.dataTransfer.setData("from", position);
     
     e.dataTransfer.effectAllowed = "move";
-    console.log(e.target);
+    // console.log(e.target);
     setIsDragging(true);
   }
   const onDragEnd = (e) => {
@@ -51,6 +51,14 @@ function ChessPiece({piece, position}) {
 }
 
 function Square({rank, file, color, piece, onMove}) {
+  const [isDragOver, setIsDragOver] = useState(false) //for highlighting squares
+
+  function onDragEnter(e) {
+    setIsDragOver(true);
+  }
+  function onDragLeave(e) {
+    setIsDragOver(false);
+  }
   function onDragOver(e) {
     e.preventDefault();
   }
@@ -60,13 +68,16 @@ function Square({rank, file, color, piece, onMove}) {
     let from = e.dataTransfer.getData("from")
     let to = getSquareName(rank, file);
     onMove(from, to);
-    console.log(from, to);
+    
+    setIsDragOver(false);
   }
 
   return (
-    <div className={"square " + color} 
+    <div className={"square " + color + (isDragOver? " dragover": "")}
       onDrop={onDrop}
       onDragOver={onDragOver}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
     >
       <span className="file-text">{rank === 1? file : null}</span>
       <span className="rank-text">{file === 'a'? rank : null}</span>
