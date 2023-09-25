@@ -12,6 +12,15 @@ function Game() {
   const [history, setHistory] = useState(null);
   const [msg, setMsg] = useState(getDisplayMsg());
 
+  function updateGameState() {
+    setPosition(chess.board());
+    setHistory(chess.history().reduce((curr="", move, moveNo)=>{
+        return curr + String(moveNo+1) + ". " + move + ", ";
+      }, ""));
+
+    //update board msg
+    setMsg(getDisplayMsg());
+  }
   function onMove(from, to) {
     try {
       if(chess.isGameOver()) {
@@ -20,18 +29,15 @@ function Game() {
 
       // move piece and update board state
       chess.move({from, to});
-      setPosition(chess.board());
-      setHistory(chess.history().reduce((curr="", move, moveNo)=>{
-        return curr + String(moveNo+1) + ". " + move + ", ";
-      }, ""));
-
-      //update board msg
-      setMsg(getDisplayMsg());
-
+      updateGameState();
     } catch (error) {
       // handle invalid moves here
       // console.log(error);
     }
+  }
+  function undo() {
+    chess.undo();
+    updateGameState();
   }
   function getLegalMoves(square) {
     //return list of squares current piece can move to
@@ -41,9 +47,7 @@ function Game() {
   }
   function resetBoard() {
     chess.reset();
-    setPosition(chess.board());
-    setHistory(null);
-    setMsg(getDisplayMsg());
+    updateGameState();
   }
   function getDisplayMsg() {
     if(chess.isGameOver()) {
@@ -75,7 +79,7 @@ function Game() {
         <div className="msg-board">{msg}</div>
         <div className="button-board">
           <button onClick={resetBoard}>New Game</button>
-          <button onClick={()=>{}}>Undo</button>
+          <button onClick={undo}>Undo</button>
         </div>
       </div>
     </div>
