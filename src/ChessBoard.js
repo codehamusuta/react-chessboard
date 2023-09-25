@@ -22,7 +22,7 @@ function getSquareName(rank, file) {
 /*******************************************************************************
  * Components
  ******************************************************************************/
-function ChessPiece({piece, position}) {
+function ChessPiece({piece, position, showLegalMoves}) {
   const [isDragging, setIsDragging] = useState(false) 
   
   const onDragStart = (e) => {
@@ -31,11 +31,12 @@ function ChessPiece({piece, position}) {
     e.dataTransfer.setData("from", position);
     
     e.dataTransfer.effectAllowed = "move";
-    // console.log(e.target);
     setIsDragging(true);
+    showLegalMoves(position);
   }
   const onDragEnd = (e) => {
     setIsDragging(false);
+    showLegalMoves(null);
   }
   return (
     <button className="chess-piece">
@@ -50,7 +51,7 @@ function ChessPiece({piece, position}) {
   )
 }
 
-function Square({rank, file, color, piece, onMove}) {
+function Square({rank, file, color, piece, onMove, highlightAsLegal, showLegalMoves}) {
   const [isDragOver, setIsDragOver] = useState(false) //for highlighting squares
 
   function onDragEnter(e) {
@@ -71,17 +72,18 @@ function Square({rank, file, color, piece, onMove}) {
     
     setIsDragOver(false);
   }
-
+  
   return (
-    <div className={"square " + color + (isDragOver? " dragover": "")}
+    <div className={"square " + color + (isDragOver? " dragover": "") + (highlightAsLegal? " legal": "")}
       onDrop={onDrop}
       onDragOver={onDragOver}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
     >
+      <div className="square__dot"></div>
       <span className="file-text">{rank === 1? file : null}</span>
       <span className="rank-text">{file === 'a'? rank : null}</span>
-      <ChessPiece piece={piece} position={getSquareName(rank, file)}/>
+      <ChessPiece piece={piece} position={getSquareName(rank, file)} showLegalMoves={showLegalMoves}/>
     </div>
   );
 }
@@ -102,7 +104,17 @@ function setBoard() {
 }
 
 
-function ChessBoard({position = setBoard(), onMove}) {
+function ChessBoard({position = setBoard(), onMove, getLegalMoves}) {
+  const [legalMoves, setLegalMoves] = useState([]); //highlight legal moves
+  
+  function showLegalMoves(square) {
+    if(square === null) {
+      setLegalMoves([]);
+    } else {
+      setLegalMoves(getLegalMoves(square));
+    }
+  }
+
   // coordinates on chess board
   const RANKS = [1,2,3,4,5,6,7,8];
   const FILES = ['a','b','c','d','e','f','g','h'];
@@ -119,6 +131,8 @@ function ChessBoard({position = setBoard(), onMove}) {
           color={(i+j) % 2 === 0? "light":"dark"}
           piece={position[i][j]} 
           onMove={onMove}
+          highlightAsLegal={legalMoves.includes(getSquareName(rank, file))}
+          showLegalMoves={showLegalMoves}
         />
       );
     });

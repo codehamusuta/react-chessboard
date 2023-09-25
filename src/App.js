@@ -12,14 +12,19 @@ function Game() {
 
   function onMove(from, to) {
     try {
-      //move piece
+      // move piece and update board state
       chess.move({from, to});
-      //update position
       setPosition(chess.board());
     } catch (error) {
-      //handle invalid moves here
-      console.log(error);
+      // handle invalid moves here
+      // console.log(error);
     }
+  }
+  function getLegalMoves(square) {
+    //return list of squares current piece can move to
+    return chess.moves({square: square, verbose: true}).map((move, _)=>{
+      return move['to'];
+    }); //use verbose because the information on destination squares only available in verbose mode
   }
 
   function resetBoard() {
@@ -29,7 +34,7 @@ function Game() {
 
   return (
     <>
-      <ChessBoard position={position} onMove={onMove}/>
+      <ChessBoard position={position} onMove={onMove} getLegalMoves={getLegalMoves}/>
       <div>
         <button onClick={resetBoard}>New Game</button>
       </div>

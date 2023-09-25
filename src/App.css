@@ -87,16 +87,40 @@ ul {
   width: 50px;
   position: relative;
 }
-
 .square.dark {
   background: #b58863;
   color: #f0d9b5;
 }
-
 .square.light {
   background: #f0d9b5;
   color: #b58863;
 }
+.square > .square__dot {
+  width: 30%;
+  height: 30%;
+  top: 35%;
+  left: 35%;
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  background: #86786d;
+  visibility: hidden; 
+  display: none;
+  z-index: -1;
+}
+.square.legal {
+  opacity: 0.7;
+  /* border: 1px solid #fa9f9f; */
+}
+.square.legal > .square__dot {
+  display: block;
+  visibility: visible;
+}
+
+.square.dragover {
+  border: 3px solid #faf0e8; 
+}
+
 
 .square .file-text {
   display: block;
@@ -115,9 +139,7 @@ ul {
   left: 3px;
   position: absolute;
 }
-.square.dragover {
-  border: 3px solid #faf0e8; 
-}
+
 
 .chess-piece {
   background: None;
