@@ -73,7 +73,10 @@ function Game() {
     <div className="game">
       <div className="mid">
         <ChessBoard position={position} onMove={onMove} getLegalMoves={getLegalMoves}/>
-        <div className="history">{history}</div> 
+        <div className="history">
+          <h4>History</h4>
+          <p>{history}</p>
+        </div> 
       </div>
       <div className="bottom">
         <div className="msg-board">{msg}</div>
