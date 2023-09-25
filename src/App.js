@@ -65,7 +65,7 @@ function Game() {
       };
     } else {
       let turn = chess.turn() === 'b'? 'black': 'white';
-      return `It's ${turn} turn to move.`;
+      return `It's ${turn}'s turn to move.`;
     }
   }
 
