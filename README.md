@@ -7,7 +7,7 @@ This is meant as a UI layer designed to be integrated with [chess.js](https://gi
 The main chessboard component is in `src/ChessBoard.js`. Integration with chess.js is demonstrated in `App.js`.
 
 ## Project Status
-This is currently a toy project and is not actively maintained. However, if you think this is useful and would like to contribute or request of additinal functionality, feel free to reach out to me.
+This is currently a toy project and is not actively maintained. However, if you think this is useful and would like to contribute or request of additional functionality, feel free to reach out to me.
 
 ## To run project
 
