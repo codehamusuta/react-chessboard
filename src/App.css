@@ -128,8 +128,11 @@ ul {
   width: 100%;
   cursor: grab;
 }
-/* .grabbing:active {
+.grabbing:active {
   cursor: grabbing;
+}
+/* .grabbing {
+  display: None;
 } */
 
 /* .status {
