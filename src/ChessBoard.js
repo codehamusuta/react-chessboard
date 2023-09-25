@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { Chess } from "chess.js";
 
 import './App.css';
-
-
 
 /*******************************************************************************
  * Helper Functions
