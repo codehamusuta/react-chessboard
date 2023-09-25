@@ -3,26 +3,32 @@ import { Chess } from "chess.js";
 
 import './App.css';
 
+
+
+/*******************************************************************************
+ * Helper Functions
+ ******************************************************************************/
 function getPieceImg(piece) {
-  /** Retrive the image path of a piece given its notation.
-   *  Piece notation follows chessjs format {type: str, color: str}
-  */
+  // Retrive the image path of a piece given its notation.
+  // Piece notation follows chessjs format {type: str, color: str}
  if(piece == null) return;
  return 'images/' + piece['color'] + piece['type'] + '.png'; //e.g. image/bk.png
 }
 
-// coordinates on chess board
-const RANKS = [1,2,3,4,5,6,7,8];
-const FILES = ['a','b','c','d','e','f','g','h'];
+function getSquareName(rank, file) {
+  return file + rank; //e.g 'a5'
+}
 
-function ChessPiece({piece, rank, file}) {
+/*******************************************************************************
+ * Components
+ ******************************************************************************/
+function ChessPiece({piece, position}) {
   const [isDragging, setIsDragging] = useState(false)
   
   const onDragStart = (e) => {
     
     e.dataTransfer.setData("piece", piece);
-    e.dataTransfer.setData("rank", rank);
-    e.dataTransfer.setData("file", file);
+    e.dataTransfer.setData("from", position);
     
     e.dataTransfer.effectAllowed = "move";
     console.log(e.target);
@@ -44,30 +50,27 @@ function ChessPiece({piece, rank, file}) {
   )
 }
 
-function Square({rank, file, color, piece}) {
-  const onDragOver = (e) => {
+function Square({rank, file, color, piece, onMove}) {
+  function onDragOver(e) {
     e.preventDefault();
   }
-  const onDrop = (e) => {
+  function onDrop(e) {
     e.preventDefault();
     
-    // onMove(
-    //   e.dataTransfer.getData("piece"),
-    //   [e.dataTransfer.getData("rank"), e.dataTransfer.getData("file")],
-    //   [rank, file]
-    // );
-
-    console.log(e.dataTransfer.getData("piece"));
-    console.log(rank, file);
+    let from = e.dataTransfer.getData("from")
+    let to = getSquareName(rank, file);
+    onMove(from, to);
+    console.log(from, to);
   }
+
   return (
     <div className={"square " + color} 
       onDrop={onDrop}
       onDragOver={onDragOver}
     >
-      <span className="file-text">{rank === 7? FILES[file] : null}</span>
-      <span className="rank-text">{file == 0? RANKS[rank] : null}</span>
-      <ChessPiece piece={piece} rank={rank} file={file}/>
+      <span className="file-text">{rank === 1? file : null}</span>
+      <span className="rank-text">{file === 'a'? rank : null}</span>
+      <ChessPiece piece={piece} position={getSquareName(rank, file)}/>
     </div>
   );
 }
@@ -88,31 +91,34 @@ function setBoard() {
 }
 
 
+function ChessBoard({position = setBoard(), onMove}) {
+  // coordinates on chess board
+  const RANKS = [1,2,3,4,5,6,7,8];
+  const FILES = ['a','b','c','d','e','f','g','h'];
 
-function ChessBoard({position = setBoard()}) {
-  const board = Array(8).fill(0).map((_, i) => {
-    const row = Array(8).fill(0).map((_, j) => {
+  //baord is a collection of rows
+  const board = RANKS.reverse().map((rank, i) => {
+    //row is a collection of squares
+    const row = FILES.map((file, j) => {
       return (
         <Square 
-          key={FILES[j] + RANKS[i]} 
-          rank={i} 
-          file={j} 
+          key={getSquareName(rank, file)} 
+          rank={rank}
+          file={file}
           color={(i+j) % 2 === 0? "light":"dark"}
-          piece={position[i][j]}
-          // onMove={onMove}
+          piece={position[i][j]} 
+          onMove={onMove}
         />
       );
     });
     return (
-      <div key={RANKS[i]} className="board-row">
+      <div key={rank} className="board-row">
         {row}
       </div>
     )
   });
   return (
-    <div className="chess-board">
-      {board}
-    </div>
+    <div className="chess-board">{board}</div>
   )
 }
 

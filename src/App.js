@@ -123,13 +123,27 @@ import './App.css';
 //   )
 // }
 
-
+const chess = new Chess(); //object that handles logic
 
 function Game() {
   // const [position, setPosition] = useState(setBoard())
-  const chess = new Chess(); //object that handles logic
+  // const chess = new Chess(); //object that handles logic
+  const [position, setPosition] = useState(chess.board());
+
+  function onMove(from, to) {
+    try {
+      //move piece
+      chess.move({from, to});
+      //update position
+      setPosition(chess.board());
+      console.log(chess.ascii());
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <ChessBoard chess={chess}/>
+    <ChessBoard position={position} onMove={onMove}/>
   )
 }
 
