@@ -5,7 +5,7 @@ import './App.css';
 /*******************************************************************************
  * Helper Functions
  ******************************************************************************/
-function getPieceImg(piece) {
+export function getPieceImg(piece) {
   // Retrive the image path of a piece given its notation.
   // Piece notation follows chessjs format {type: str, color: str}
  if(piece == null) return;
