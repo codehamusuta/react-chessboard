@@ -256,12 +256,13 @@ ul {
   width: 100%;
   cursor: grab;
 }
-.grabbing:active {
-  cursor: grabbing;
+.chess-piece--dragging {
+  visibility: hidden;
 }
-/* .grabbing {
-  display: None;
-} */
+.chess-piece--dragging:active {
+  cursor: grabbing;
+  opacity: 1;
+}
 
 /* .status {
   margin-bottom: 10px;

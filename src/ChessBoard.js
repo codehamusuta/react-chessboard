@@ -28,7 +28,14 @@ function ChessPiece({piece, position, showLegalMoves}) {
     e.dataTransfer.setData("from", position);
     
     e.dataTransfer.effectAllowed = "move";
-    setIsDragging(true);
+
+    // set timeout trick to allow js to clone the element for dragging
+    // before hiding the original element
+    // https://stackoverflow.com/questions/36379184/html5-draggable-hide-original-element
+    setTimeout(()=>{
+      setIsDragging(true);
+    }, 0.01); 
+
     showLegalMoves(position);
   }
   const onDragEnd = (e) => {
@@ -38,7 +45,7 @@ function ChessPiece({piece, position, showLegalMoves}) {
   return (
     <button className="chess-piece">
       <img 
-        className={isDragging? "grabbing": ""}
+        className={isDragging? "chess-piece--dragging": ""}
         src={getPieceImg(piece)} 
         draggable="true" 
         onDragStart={onDragStart}
