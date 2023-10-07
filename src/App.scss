@@ -256,13 +256,18 @@ $square-width: $square-height;
 }
 .chess-piece > img {
   width: 100%;
+  cursor: move; /* fallback if grab cursor is unsupported */
   cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 }
 .chess-piece--dragging {
   visibility: hidden;
 }
 .chess-piece--dragging:active {
   cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
   opacity: 1;
 }
 
