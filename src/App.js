@@ -7,10 +7,6 @@ import './App.scss';
 
 const chess = new Chess(); //object that handles logic
 
-//to remove
-const test_fen = "k7/4P3/8/8/8/8/4p3/7K w - - 0 1"
-chess.load(test_fen);
-
 function Player({opponentColor, capturedPieces}) {
   //the order to display the captured pieces
   const pieceTypes = ['p', 'n', 'b', 'r', 'q', 'k']; 
@@ -68,13 +64,15 @@ function Game() {
       });
     }
   }
-  function onMove(from, to) {
+  // function onMove(from, to) {
+  function moveHandler(moveObj) {
+    //move object should contain from, to and optional promotion field
     try {
       if(chess.isGameOver()) {
         return;
       }
       // move piece and update board state
-      const move = chess.move({from, to});
+      const move = chess.move(moveObj);
       updateCaptures(move, undo=false);
       updateGameState();
     } catch (error) {
@@ -123,7 +121,12 @@ function Game() {
       <div className="game-mid">
         <div className="game-mid__left">
           <Player opponentColor={"w"} capturedPieces={captures["b"]} />
-          <ChessBoard position={position} onMove={onMove} getLegalMoves={getLegalMoves}/>
+          <ChessBoard 
+            position={position}  
+            turn={chess.turn()}
+            moveHandler={moveHandler} 
+            getLegalMoves={getLegalMoves}
+          />
           <Player opponentColor={"b"} capturedPieces={captures["w"]} />
         </div>
         <div className="history">
