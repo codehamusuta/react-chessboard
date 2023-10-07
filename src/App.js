@@ -3,9 +3,13 @@ import { Chess } from "chess.js";
 import ChessBoard, { getPieceImg } from "./ChessBoard.js";
 
 // import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 
 const chess = new Chess(); //object that handles logic
+
+//to remove
+const test_fen = "k7/4P3/8/8/8/8/4p3/7K w - - 0 1"
+chess.load(test_fen);
 
 function Player({opponentColor, capturedPieces}) {
   //the order to display the captured pieces
@@ -65,14 +69,12 @@ function Game() {
     }
   }
   function onMove(from, to) {
-    console.log(from, to);
     try {
       if(chess.isGameOver()) {
         return;
       }
       // move piece and update board state
       const move = chess.move({from, to});
-      console.log(move);
       updateCaptures(move, undo=false);
       updateGameState();
     } catch (error) {

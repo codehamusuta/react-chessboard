@@ -1,6 +1,15 @@
-import { useState } from "react";
+/**
+ * Refactor Plan
+ * - manage all states in chessboard (for now)
+ * - treat chessboard like redux state
+ * - use reducer to manage actions (for cleaner state management)
+ */
 
-import './App.css';
+
+import { useState } from "react";
+import { useRef } from "react";
+
+import './App.scss';
 
 /*******************************************************************************
  * Helper Functions
@@ -24,7 +33,8 @@ function ChessPiece({piece, position, showLegalMoves}) {
   
   const onDragStart = (e) => {
     
-    e.dataTransfer.setData("piece", piece);
+    e.dataTransfer.setData("piece color", piece['color']);
+    e.dataTransfer.setData("piece type", piece['type']);
     e.dataTransfer.setData("from", position);
     
     e.dataTransfer.effectAllowed = "move";
@@ -55,6 +65,23 @@ function ChessPiece({piece, position, showLegalMoves}) {
   )
 }
 
+function PromotionSelect({style}){
+  const pieceTypes = ['n', 'b', ,'r', 'q'];
+  const color = 'w';
+  const elements = pieceTypes.map((pieceType, _)=>{
+    return (
+      <div className="promotion__square">
+        <img src={getPieceImg({'type': pieceType, 'color': color})} draggable="false"/>
+      </div>
+    )
+  });
+  return (
+    <div className="promotion" style={style}>
+      {elements}
+    </div>
+  )
+}
+
 function Square({rank, file, color, piece, onMove, highlightAsLegal, showLegalMoves}) {
   const [isDragOver, setIsDragOver] = useState(false) //for highlighting squares
 
@@ -70,9 +97,21 @@ function Square({rank, file, color, piece, onMove, highlightAsLegal, showLegalMo
   function onDrop(e) {
     e.preventDefault();
     
-    let from = e.dataTransfer.getData("from")
+    let pieceType = e.dataTransfer.getData("piece type");
+    let from = e.dataTransfer.getData("from");
     let to = getSquareName(rank, file);
-    onMove(from, to);
+
+    // if from == to, do nothing
+    if (from != to) {
+      //handle promotion
+      if (pieceType == "p" && (rank == 8 || rank == 1)){ 
+        console.log("promotion");
+        alert("promotion");
+      }
+      else {
+        onMove(from, to);
+      }
+    }
     
     setIsDragOver(false);
   }
@@ -107,9 +146,20 @@ function setBoard() {
   return position
 }
 
-
 function ChessBoard({position = setBoard(), onMove, getLegalMoves}) {
   const [legalMoves, setLegalMoves] = useState([]); //highlight legal moves
+  const [promotionSelect, setPromotionSelect] = useState({
+    show: true,
+    left: 0,
+    top: 0
+  });
+  // //keep tracks of piece being moved
+  // const move = useRef({
+  //   from: null, 
+  //   to: null,
+  //   pieceType: null,
+  //   pieceColor: null,
+  // }); 
   
   function showLegalMoves(square) {
     if(square === null) {
@@ -147,7 +197,10 @@ function ChessBoard({position = setBoard(), onMove, getLegalMoves}) {
     )
   });
   return (
-    <div className="chess-board">{board}</div>
+    <div className="chess-board">
+      {promotionSelect.show? <PromotionSelect style={promotionSelect}/> : ""}
+      {board}
+    </div>
   )
 }
 

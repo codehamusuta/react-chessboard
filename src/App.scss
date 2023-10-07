@@ -156,6 +156,7 @@ ul {
   width: 400px;
   margin: auto;
   box-sizing: content-box;
+  position: relative;
 }
 /*clearfix hack*/
 .chess-board:after {
@@ -175,28 +176,33 @@ ul {
   display: table;
 }
 
+$square-color-light: #f0d9b5;
+$square-color-dark: #b58863;
+$square-height: 50px;
+$square-width: $square-height;
+
 .square {
   background: #fff;
   /* border: 1px solid #999; */
   float: left;
   font-size: 24px;
   font-weight: bold;
-  line-height: 50px;
-  height: 50px;
+  line-height: $square-height;
+  height: $square-height;
   /* margin-right: -1px; */
   /* margin-top: -1px; */
   padding: 0;
   text-align: center;
-  width: 50px;
+  width: $square-width;
   position: relative;
 }
 .square.dark {
-  background: #b58863;
-  color: #f0d9b5;
+  background: $square-color-dark;
+  color: $square-color-light;
 }
 .square.light {
-  background: #f0d9b5;
-  color: #b58863;
+  background: $square-color-light;
+  color: $square-color-dark;
 }
 .square > .square__dot {
   width: 30%;
@@ -219,12 +225,9 @@ ul {
   display: block;
   visibility: visible;
 }
-
 .square.dragover {
   border: 3px solid #faf0e8; 
 }
-
-
 .square .file-text {
   display: block;
   font-size: 12px;
@@ -233,7 +236,6 @@ ul {
   right: 3px;
   position: absolute;
 }
-
 .square .rank-text {
   display: block;
   font-size: 12px;
@@ -264,14 +266,23 @@ ul {
   opacity: 1;
 }
 
-/* .status {
-  margin-bottom: 10px;
+.promotion {
+  z-index: 100;
+  position: absolute;
+  background-color: white;
+  width: $square-width;
+  height: $square-height*4;
+  padding: 0px;
+  margin: 0px;
+  display: block;
+  border-radius: 1px;
 }
-.game {
-  display: flex;
-  flex-direction: row;
+.promotion__square {
+  cursor: pointer;
 }
-
-.game-info {
-  margin-left: 20px;
-} */
+.promotion__square:hover {
+  background-color: rgba(220,220,220,0.8);
+}
+.promotion__square > img {
+  display: block;
+}
