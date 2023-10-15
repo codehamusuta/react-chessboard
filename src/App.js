@@ -6,6 +6,7 @@ import ChessBoard, { getPieceImg } from "./ChessBoard.js";
 import './App.scss';
 
 const chess = new Chess(); //object that handles logic
+window.chess = chess;
 
 function Player({opponentColor, capturedPieces}) {
   //the order to display the captured pieces
@@ -43,7 +44,11 @@ function Game() {
   function updateGameState() {
     setPosition(chess.board());
     setHistory(chess.history().reduce((curr="", move, moveNo)=>{
-        return curr + String(moveNo+1) + ". " + move + ", ";
+        if(moveNo%2 == 0) {
+          return curr + String(moveNo/2+1) + ". " + move + " ";
+        } else {
+          return curr + " " + move + " ";
+        }
       }, ""));
 
     //update board msg
