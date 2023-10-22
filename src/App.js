@@ -8,9 +8,8 @@ import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import './App.scss';
 
 const chess = new Chess(); //object that handles logic
-// window.chess = chess;
 
-window.chess = chess;
+// window.chess = chess;
 
 function Player({opponentColor, capturedPieces}) {
   //the order to display the captured pieces
