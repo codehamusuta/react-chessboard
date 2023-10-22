@@ -143,7 +143,7 @@ function Game() {
             getLegalMoves={getLegalMoves}
             viewAsWhite={viewAsWhite}
           />
-          <Player opponentColor={viewAsWhite? "b": "W"} capturedPieces={captures[viewAsWhite? "w": "b"]} />
+          <Player opponentColor={viewAsWhite? "b": "w"} capturedPieces={captures[viewAsWhite? "w": "b"]} />
         </div>
         <div className="history">
           <h4>History</h4>
