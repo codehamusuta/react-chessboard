@@ -73,7 +73,7 @@ function PromotionSelect({style, pieceColor, selectPromotion}){
   )
 }
 
-function Square({rank, file, color, piece, 
+function Square({rank, file, displayRank, displayFile, color, piece, 
   moveHandler, highlightAsLegal, showLegalMoves,
   dropPiece,
   movePiece
@@ -103,8 +103,8 @@ function Square({rank, file, color, piece,
       onDragLeave={onDragLeave}
     >
       <div className="square__dot"></div>
-      <span className="file-text">{rank === 1? file : null}</span>
-      <span className="rank-text">{file === 'a'? rank : null}</span>
+      <span className="file-text">{displayFile? file : null}</span>
+      <span className="rank-text">{displayRank? rank : null}</span>
       <ChessPiece 
           piece={piece} 
           position={getSquareName(rank, file)} 
@@ -242,6 +242,8 @@ function ChessBoard({
           key={getSquareName(rank, file)} 
           rank={rank}
           file={file}
+          displayRank={j==0?true:false}
+          displayFile={i==7?true:false}
           color={(rank+j) % 2 === 0? "light":"dark"}
           piece={position[8-rank][j]} 
           moveHandler={moveHandler}
