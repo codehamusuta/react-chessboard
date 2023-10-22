@@ -7,6 +7,8 @@ import './App.scss';
 
 const chess = new Chess(); //object that handles logic
 
+window.chess = chess;
+
 function Player({opponentColor, capturedPieces}) {
   //the order to display the captured pieces
   const pieceTypes = ['p', 'n', 'b', 'r', 'q', 'k']; 

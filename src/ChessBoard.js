@@ -136,8 +136,21 @@ function getFileIndex(file) {
   return FILES.indexOf(file);
 }
 
+/**
+ * Main chessboard component
+ * @component
+ * @param {string[][]}   position   - current position of the board 
+ * @param {string}       turn       - the current side to move ('b'/'w') 
+ * @param {string}       viewAsWhite  - view the chessboard is white or black
+ * @param {function(obj): null}   moveHandler - handler from chess engine to move a piece given a move object
+ * @param {function(string): string[]} getLegalMoves - Returns a list of positions that are legal moves given a position on a chess board
+ */
 function ChessBoard({
-  position = setBoard(), turn, moveHandler, getLegalMoves
+  position = setBoard(), 
+  turn = 'w', 
+  viewAsWhite = true,
+  moveHandler, 
+  getLegalMoves
 }) {
   const [legalMoves, setLegalMoves] = useState([]); //highlight legal moves
   const [promotionSelect, setPromotionSelect] = useState({
@@ -215,11 +228,13 @@ function ChessBoard({
   // Render Board
   //============================================================================
   // coordinates on chess board
-  const RANKS = [1,2,3,4,5,6,7,8];
-  const FILES = ['a','b','c','d','e','f','g','h'];
+  let RANKS = [1,2,3,4,5,6,7,8];
+  let FILES = ['a','b','c','d','e','f','g','h'];
 
-  //baord is a collection of rows
-  const board = RANKS.reverse().map((rank, i) => {
+  if (viewAsWhite) RANKS = RANKS.reverse();
+
+  //board is a collection of rows
+  const board = RANKS.map((rank, i) => {
     //row is a collection of squares
     const row = FILES.map((file, j) => {
       return (
@@ -227,8 +242,8 @@ function ChessBoard({
           key={getSquareName(rank, file)} 
           rank={rank}
           file={file}
-          color={(i+j) % 2 === 0? "light":"dark"}
-          piece={position[i][j]} 
+          color={(rank+j) % 2 === 0? "light":"dark"}
+          piece={position[8-rank][j]} 
           moveHandler={moveHandler}
           highlightAsLegal={legalMoves.includes(getSquareName(rank, file))}
           showLegalMoves={showLegalMoves}
