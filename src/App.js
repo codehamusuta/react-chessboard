@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Chess } from "chess.js";
 import ChessBoard, { getPieceImg } from "./ChessBoard.js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 // import logo from './logo.svg';
 import './App.scss';
@@ -35,6 +37,7 @@ function Game() {
   const [history, setHistory] = useState(null);
   const [msg, setMsg] = useState(getDisplayMsg());
   const [captures, setCaptures] = useState(resetCaptures());
+  const [viewAsWhite, setViewAsWhite] = useState(true);
 
   function resetCaptures() {
     return {
@@ -122,21 +125,27 @@ function Game() {
     <div className="game">
       <div className="game-mid">
         <div className="game-mid__left">
-          <Player opponentColor={"w"} capturedPieces={captures["b"]} />
+          <FontAwesomeIcon 
+            icon={icon({name: 'retweet', style:"solid", size:"2xs"})} 
+            transform="stretch-6"
+            className="flip-board-icon"
+            onClick={()=>setViewAsWhite(!viewAsWhite)}
+          /> 
+          <Player opponentColor={viewAsWhite? "w": "b"} capturedPieces={captures[viewAsWhite? "b": "w"]} />
           <ChessBoard 
             position={position}  
             turn={chess.turn()}
             moveHandler={moveHandler} 
             getLegalMoves={getLegalMoves}
+            viewAsWhite={viewAsWhite}
           />
-          <Player opponentColor={"b"} capturedPieces={captures["w"]} />
+          <Player opponentColor={viewAsWhite? "b": "W"} capturedPieces={captures[viewAsWhite? "w": "b"]} />
         </div>
         <div className="history">
           <h4>History</h4>
           <p>{history}</p>
         </div> 
       </div>
-      
       <div className="game-bottom">
         <div className="msg-board">{msg}</div>
         <div className="button-board">
