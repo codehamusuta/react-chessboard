@@ -231,12 +231,21 @@ function ChessBoard({
   let RANKS = [1,2,3,4,5,6,7,8];
   let FILES = ['a','b','c','d','e','f','g','h'];
 
-  if (viewAsWhite) RANKS = RANKS.reverse();
+  let xGrid = null;
+  let yGrid = null;
+
+  if (viewAsWhite) {
+    xGrid = FILES;
+    yGrid = RANKS.toReversed();  // toReversed creates a copy; reverse() is in place
+  } else {
+    xGrid = FILES.toReversed();  // toReversed creates a copy; reverse() is in place
+    yGrid = RANKS;
+  }
 
   //board is a collection of rows
-  const board = RANKS.map((rank, i) => {
+  const board = yGrid.map((rank, i) => {
     //row is a collection of squares
-    const row = FILES.map((file, j) => {
+    const row = xGrid.map((file, j) => {
       return (
         <Square 
           key={getSquareName(rank, file)} 
@@ -244,8 +253,8 @@ function ChessBoard({
           file={file}
           displayRank={j==0?true:false}
           displayFile={i==7?true:false}
-          color={(rank+j) % 2 === 0? "light":"dark"}
-          piece={position[8-rank][j]} 
+          color={(rank+FILES.indexOf(file)+1) % 2 === 0? "light":"dark"}
+          piece={position[8-rank][FILES.indexOf(file)]} 
           moveHandler={moveHandler}
           highlightAsLegal={legalMoves.includes(getSquareName(rank, file))}
           showLegalMoves={showLegalMoves}
